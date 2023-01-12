@@ -4,34 +4,19 @@ import csv
 source_conn = psycopg2.connect(host="localhost", database="postgres", user="postgres", password="postgres")
 cur = source_conn.cursor()
 source_conn.autocommit = True
-cur.execute("CREATE DATABASE north_2")
+cur.execute("CREATE DATABASE north_3")
 source_conn.close()
 
-conn_to_db = psycopg2.connect(host="localhost", database="north_2", user="postgres", password="postgres")
+conn_to_db = psycopg2.connect(host="localhost", database="north_3", user="postgres", password="postgres")
 cur = conn_to_db.cursor()
 
-cur.execute("""CREATE TABLE customers (
-	customer_id varchar(20) PRIMARY KEY,
-	company_name varchar(50) NOT NULL,
-	contact_name varchar(50) NOT NULL
-)""")
+file_sql = open('create_tables.sql', "r")
+sql_commands = file_sql.read().split(";")
 
-cur.execute("""CREATE TABLE employees (
-    employee_id int PRIMARY KEY,
-	first_name varchar(30) NOT NULL,
-	last_name varchar (30) NOT NULL,
-	title varchar(50) NOT NULL,
-	birth_date date NOT NULL,
-	notes text NOT NULL
-)""")
-
-cur.execute("""CREATE TABLE orders (
-	order_id int PRIMARY KEY,
-	customer_id varchar(20) REFERENCES customers(customer_id) NOT NULL,
-	employee_id int REFERENCES employees(employee_id) NOT NULL,
-	order_date date NOT NULL,
-	ship_city varchar(30) NOT NULL
-)""")
+for command in sql_commands:
+    if not command:
+        continue
+    cur.execute(command)
 
 with open('north\customers_data.csv', 'r', encoding='utf-8') as f:
     reader = csv.reader(f)

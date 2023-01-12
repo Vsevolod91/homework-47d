@@ -1,5 +1,3 @@
-CREATE DATABASE north;
-
 CREATE TABLE customers (
 	customer_id varchar(20) PRIMARY KEY,
 	company_name varchar(50) NOT NULL,
@@ -22,9 +20,3 @@ CREATE TABLE orders (
 	order_date date NOT NULL,
 	ship_city varchar(30) NOT NULL
 );
-
-
-
-
-
-
